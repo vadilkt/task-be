@@ -100,10 +100,6 @@ Vous pouvez interagir avec l'API via un outil comme [Postman](https://www.postma
   DELETE /api/tasks/{id}
   ```
 
-## Tests
-
-_La section des tests sera ajoutée ultérieurement._
-
 ## Technologies utilisées
 
 - **Spring Boot** - Framework pour le développement rapide d'applications Java
@@ -112,5 +108,3 @@ _La section des tests sera ajoutée ultérieurement._
 - **JUnit** - Framework de tests pour les tests unitaires (à implémenter)
 
 ---
-
-Ce README fournit toutes les informations nécessaires pour installer, configurer et lancer le projet. Remplacez `nom-utilisateur` par votre identifiant GitHub et personnalisez davantage si nécessaire.
