@@ -27,7 +27,7 @@ Avant de commencer, assurez-vous que les éléments suivants sont installés sur
 
 1. **Cloner le dépôt**
    ```bash
-   git clone https://github.com/nom-utilisateur/task-management.git
+   git clone https://github.com/vadilkt/task-management.git
    cd task-management
    ```
 
