@@ -1,6 +1,7 @@
 package com.essai.taskmanagament.controller;
 
-import com.essai.taskmanagament.dto.TaskDTO;
+import com.essai.taskmanagament.dto.TaskRequestDTO;
+import com.essai.taskmanagament.dto.TaskResponseDTO;
 import com.essai.taskmanagament.service.TaskService;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
@@ -20,10 +21,8 @@ import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
-import static org.springframework.test.web.servlet.request.MockMvcRequestBuilders.*;
-import static org.springframework.test.web.servlet.result.MockMvcResultMatchers.status;
 
-class TaskControllerTest {
+class PostgresTaskControllerTest {
 
     private MockMvc mockMvc;
 
@@ -41,27 +40,30 @@ class TaskControllerTest {
 
     @Test
     void testAddTask() throws Exception {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTitle("Test Task");
+        TaskRequestDTO taskRequestDTO = new TaskRequestDTO();
+        taskRequestDTO.setTitle("Test PostgresTask");
 
-        when(taskService.addTask(any(TaskDTO.class))).thenReturn(taskDTO);
+        TaskResponseDTO taskResponseDTO = new TaskResponseDTO();
+        taskResponseDTO.setTitle("Test PostgresTask");
 
-        ResponseEntity<TaskDTO> response = taskController.addTask(taskDTO);
+        when(taskService.addTask(any(TaskRequestDTO.class))).thenReturn(taskResponseDTO);
+
+        ResponseEntity<TaskResponseDTO> response = taskController.addTask(taskRequestDTO);
         assertEquals(HttpStatus.CREATED, response.getStatusCode());
-        assertEquals(taskDTO, response.getBody());
-        verify(taskService, times(1)).addTask(any(TaskDTO.class));
+        assertEquals(taskResponseDTO, response.getBody());
+        verify(taskService, times(1)).addTask(any(TaskRequestDTO.class));
     }
 
     @Test
     void testGetTasks() throws Exception {
-        TaskDTO task1 = new TaskDTO();
-        task1.setTitle("Task 1");
-        TaskDTO task2 = new TaskDTO();
-        task2.setTitle("Task 2");
+        TaskResponseDTO task1 = new TaskResponseDTO();
+        task1.setTitle("PostgresTask 1");
+        TaskResponseDTO task2 = new TaskResponseDTO();
+        task2.setTitle("PostgresTask 2");
 
         when(taskService.getAllTasks()).thenReturn(Arrays.asList(task1, task2));
 
-        ResponseEntity<List<TaskDTO>> response = taskController.getTasks();
+        ResponseEntity<List<TaskResponseDTO>> response = taskController.getTasks();
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(2, response.getBody().size());
         verify(taskService, times(1)).getAllTasks();
@@ -69,12 +71,12 @@ class TaskControllerTest {
 
     @Test
     void testGetTaskByIdFound() throws Exception {
-        TaskDTO taskDTO = new TaskDTO();
-        taskDTO.setTitle("Found Task");
+        TaskResponseDTO taskDTO = new TaskResponseDTO();
+        taskDTO.setTitle("Found PostgresTask");
 
         when(taskService.getTaskById(anyLong())).thenReturn(Optional.of(taskDTO));
 
-        ResponseEntity<TaskDTO> response = taskController.getTaskById(1L);
+        ResponseEntity<TaskResponseDTO> response = taskController.getTaskById(1L);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(taskDTO, response.getBody());
     }
@@ -83,30 +85,33 @@ class TaskControllerTest {
     void testGetTaskByIdNotFound() throws Exception {
         when(taskService.getTaskById(anyLong())).thenReturn(Optional.empty());
 
-        ResponseEntity<TaskDTO> response = taskController.getTaskById(1L);
+        ResponseEntity<TaskResponseDTO> response = taskController.getTaskById(1L);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
     @Test
     void testUpdateTask() throws Exception {
-        TaskDTO updatedTaskDTO = new TaskDTO();
-        updatedTaskDTO.setTitle("Updated Task");
+        TaskRequestDTO taskRequestDTO = new TaskRequestDTO();
+        taskRequestDTO.setTitle("Updated PostgresTask");
 
-        when(taskService.updateTask(anyLong(), any(TaskDTO.class))).thenReturn(updatedTaskDTO);
+        TaskResponseDTO updatedTaskDTO = new TaskResponseDTO();
+        updatedTaskDTO.setTitle("Updated PostgresTask");
 
-        ResponseEntity<TaskDTO> response = taskController.updateTask(1L, updatedTaskDTO);
+        when(taskService.updateTask(anyLong(), any(TaskRequestDTO.class))).thenReturn(updatedTaskDTO);
+
+        ResponseEntity<TaskResponseDTO> response = taskController.updateTask(1L, taskRequestDTO);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(updatedTaskDTO, response.getBody());
-        verify(taskService, times(1)).updateTask(anyLong(), any(TaskDTO.class));
+        verify(taskService, times(1)).updateTask(anyLong(), any(TaskRequestDTO.class));
     }
 
     @Test
     void testUpdateTaskNotFound() throws Exception {
-        TaskDTO taskDTO = new TaskDTO();
+        TaskRequestDTO taskRequestDTO = new TaskRequestDTO();
 
-        when(taskService.updateTask(anyLong(), any(TaskDTO.class))).thenThrow(new IllegalArgumentException());
+        when(taskService.updateTask(anyLong(), any(TaskRequestDTO.class))).thenThrow(new IllegalArgumentException());
 
-        ResponseEntity<TaskDTO> response = taskController.updateTask(1L, taskDTO);
+        ResponseEntity<TaskResponseDTO> response = taskController.updateTask(1L, taskRequestDTO);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 
@@ -131,12 +136,12 @@ class TaskControllerTest {
 
     @Test
     void testMarkAsCompleted() throws Exception {
-        TaskDTO completedTaskDTO = new TaskDTO();
-        completedTaskDTO.setTitle("Completed Task");
+        TaskResponseDTO completedTaskDTO = new TaskResponseDTO();
+        completedTaskDTO.setTitle("Completed PostgresTask");
 
         when(taskService.markAsCompleted(anyLong())).thenReturn(completedTaskDTO);
 
-        ResponseEntity<TaskDTO> response = taskController.markAsCompleted(1L);
+        ResponseEntity<TaskResponseDTO> response = taskController.markAsCompleted(1L);
         assertEquals(HttpStatus.OK, response.getStatusCode());
         assertEquals(completedTaskDTO, response.getBody());
         verify(taskService, times(1)).markAsCompleted(anyLong());
@@ -146,7 +151,7 @@ class TaskControllerTest {
     void testMarkAsCompletedNotFound() throws Exception {
         when(taskService.markAsCompleted(anyLong())).thenThrow(new IllegalArgumentException());
 
-        ResponseEntity<TaskDTO> response = taskController.markAsCompleted(1L);
+        ResponseEntity<TaskResponseDTO> response = taskController.markAsCompleted(1L);
         assertEquals(HttpStatus.NOT_FOUND, response.getStatusCode());
     }
 }
