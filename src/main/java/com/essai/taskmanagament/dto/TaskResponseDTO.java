@@ -9,8 +9,6 @@ import java.time.ZonedDateTime;
 @AllArgsConstructor
 @NoArgsConstructor
 public class TaskResponseDTO {
-    private Long id;
-
     @NotBlank(message = "le titre est requis")
     private String title;
     private String description;

@@ -15,5 +15,6 @@ import java.util.Optional;
 public interface MongoTaskRepository extends MongoRepository<MongoTask, String> {
     @Override
     Optional<MongoTask> findById(String id);
+
     Optional<MongoTask> findByTitle(String title);
 }

@@ -6,6 +6,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.data.mongodb.core.index.Indexed;
 import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.time.ZonedDateTime;
@@ -20,6 +21,7 @@ public class MongoTask {
     @Id
     private String id;
 
+    @Indexed(unique = true)
     private String title;
     private String description;
     private ZonedDateTime dueDate;
