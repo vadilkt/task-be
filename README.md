@@ -27,8 +27,8 @@ Avant de commencer, assurez-vous que les éléments suivants sont installés sur
 
 1. **Cloner le dépôt**
    ```bash
-   git clone https://github.com/vadilkt/postgresTask-management.git
-   cd postgresTask-management
+   git clone https://github.com/vadilkt/task-be.git
+   cd task-management
    ```
 
 2. **Configurer la base de données**
@@ -36,11 +36,15 @@ Avant de commencer, assurez-vous que les éléments suivants sont installés sur
      ```sql
      CREATE DATABASE task_management;
      ```
-   - Modifiez les informations de connexion dans le fichier `src/main/resources/application.properties` pour refléter vos identifiants PostgreSQL :
-     ```properties
-     spring.datasource.url=jdbc:postgresql://localhost:5432/task_management
-     spring.datasource.username=VOTRE_UTILISATEUR
-     spring.datasource.password=VOTRE_MOT_DE_PASSE
+   - Modifiez les informations de connexion dans le fichier `src/.env` pour refléter vos éléments de connexion à votre base de données :
+     ```.env
+     PORT=
+     DB_URL=
+     USER_NAME=
+     DB_PASSWORD=
+     
+     MONGO_URI=
+     MONGODB_NAME=
      ```
 
 3. **Construire le projet avec Maven**
@@ -58,47 +62,9 @@ mvn spring-boot:run
 
 L'application sera disponible à l'adresse [http://localhost:8080](http://localhost:8080).
 
-## Utilisation de l'API
+## Documentation Swagger
 
-Vous pouvez interagir avec l'API via un outil comme [Postman](https://www.postman.com/) ou en utilisant des commandes `curl`. Voici quelques exemples d’endpoints :
-
-- **Créer une nouvelle tâche**
-  ```http
-  POST /api/postgresTasks
-  ```
-  - Exemple de payload JSON :
-    ```json
-    {
-      "title": "Nouvelle tâche",
-      "description": "Description de la tâche",
-      "completed": false
-    }
-    ```
-
-- **Obtenir toutes les tâches**
-  ```http
-  GET /api/postgresTasks
-  ```
-
-- **Obtenir une tâche par ID**
-  ```http
-  GET /api/postgresTasks/{id}
-  ```
-
-- **Mettre à jour une tâche**
-  ```http
-  PUT /api/postgresTasks/{id}
-  ```
-
-  - **Compléter une tâche**
-  ```http
-  PATCH /api/postgresTasks/{id}/complete
-  ```
-
-- **Supprimer une tâche**
-  ```http
-  DELETE /api/postgresTasks/{id}
-  ```
+Accédez à la documentation Swagger ici: http://localhost:8070/api/documentation
 
 ## Technologies utilisées
 
