@@ -1,17 +1,16 @@
 package com.essai.taskmanagament.controller;
 
-import com.essai.taskmanagament.TaskMapper;
-import com.essai.taskmanagament.dto.TaskDTO;
+import com.essai.taskmanagament.dto.TaskRequestDTO;
+import com.essai.taskmanagament.dto.TaskResponseDTO;
 import com.essai.taskmanagament.service.TaskService;
 import jakarta.validation.Valid;
 import lombok.AllArgsConstructor;
-import lombok.Getter;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 
-import java.time.ZonedDateTime;
 import java.util.List;
 import java.util.Optional;
 
@@ -22,30 +21,30 @@ import java.util.Optional;
 @RequestMapping("/tasks")
 public class TaskController {
 
-    private TaskService taskService;
+    private final TaskService taskService;
 
     @PostMapping
-    public ResponseEntity<TaskDTO> addTask(@Valid @RequestBody TaskDTO taskDTO) {
-        TaskDTO createdTask = taskService.addTask(taskDTO);
+    public ResponseEntity<TaskResponseDTO> addTask(@Valid @RequestBody TaskRequestDTO taskRequestDTO) {
+        TaskResponseDTO createdTask = taskService.addTask(taskRequestDTO);
         return new ResponseEntity<>(createdTask, HttpStatus.CREATED);
     }
 
     @GetMapping
-    public ResponseEntity<List<TaskDTO>> getTasks(){
-        List<TaskDTO> tasks = taskService.getAllTasks();
+    public ResponseEntity<List<TaskResponseDTO>> getTasks(){
+        List<TaskResponseDTO> tasks = taskService.getAllTasks();
         return new ResponseEntity<>(tasks, HttpStatus.OK);
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<TaskDTO> getTaskById(@PathVariable Long id) {
-        Optional<TaskDTO> task = taskService.getTaskById(id);
+    public ResponseEntity<TaskResponseDTO> getTaskById(@PathVariable Long id) {
+        Optional<TaskResponseDTO> task = taskService.getTaskById(id);
         return task.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<TaskDTO> updateTask(@PathVariable Long id, @Valid @RequestBody TaskDTO taskDTO) {
+    public ResponseEntity<TaskResponseDTO> updateTask(@PathVariable Long id, @Valid @RequestBody TaskRequestDTO taskRequestDTO) {
         try {
-            TaskDTO updatedTask = taskService.updateTask(id, taskDTO);
+            TaskResponseDTO updatedTask = taskService.updateTask(id, taskRequestDTO);
             return new ResponseEntity<>(updatedTask, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
@@ -65,14 +64,12 @@ public class TaskController {
     }
 
     @PatchMapping("/{id}/complete")
-    public ResponseEntity<TaskDTO> markAsCompleted(@PathVariable Long id) {
+    public ResponseEntity<TaskResponseDTO> markAsCompleted(@PathVariable Long id) {
         try {
-            TaskDTO updatedTask = taskService.markAsCompleted(id);
+            TaskResponseDTO updatedTask = taskService.markAsCompleted(id);
             return new ResponseEntity<>(updatedTask, HttpStatus.OK);
         } catch (IllegalArgumentException e) {
             return new ResponseEntity<>(HttpStatus.NOT_FOUND);
         }
     }
-
-
 }
